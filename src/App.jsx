@@ -967,13 +967,13 @@ function Biometry() {
   );
 }
 
-function Modal({ open, onClose, children, label }) {
+function Modal({ open, onClose, children, label, className = "", initialFocusRef }) {
   const ref = useRef();
   useEffect(() => {
     if (!open) return;
     const key = (e) => e.key === "Escape" && onClose();
     document.addEventListener("keydown", key);
-    ref.current?.focus();
+    (initialFocusRef?.current || ref.current)?.focus();
     document.body.classList.add("modal-open");
     return () => {
       document.removeEventListener("keydown", key);
@@ -987,7 +987,7 @@ function Modal({ open, onClose, children, label }) {
       onMouseDown={(e) => e.target === e.currentTarget && onClose()}
     >
       <div
-        className="modal"
+        className={`modal ${className}`}
         role="dialog"
         aria-modal="true"
         aria-label={label}
@@ -1001,47 +1001,147 @@ function Modal({ open, onClose, children, label }) {
 }
 function PresentationViewer({ deck, onClose }) {
   const [page, setPage] = useState(1);
+  const closeButtonRef = useRef(null);
+  const touchStart = useRef(null);
+
   useEffect(() => setPage(1), [deck]);
+
+  useEffect(() => {
+    if (!deck) return;
+    const onKeyDown = (event) => {
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        setPage((current) => Math.max(1, current - 1));
+      }
+      if (event.key === "ArrowRight") {
+        event.preventDefault();
+        setPage((current) => Math.min(deck.pages, current + 1));
+      }
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [deck]);
+
+  useEffect(() => {
+    if (!deck) return;
+    [page - 1, page + 1]
+      .filter((nextPage) => nextPage >= 1 && nextPage <= deck.pages)
+      .forEach((nextPage) => {
+        const image = new Image();
+        image.src = `/media/presentations/${deck.slug}/page-${String(nextPage).padStart(2, "0")}.webp`;
+      });
+  }, [deck, page]);
+
   if (!deck) return null;
+
+  const previous = () => setPage((current) => Math.max(1, current - 1));
+  const next = () => setPage((current) => Math.min(deck.pages, current + 1));
+  const pageLabel = `${String(page).padStart(2, "0")} / ${String(deck.pages).padStart(2, "0")}`;
+  const slideSrc = `/media/presentations/${deck.slug}/page-${String(page).padStart(2, "0")}.webp`;
+
+  const handleTouchStart = (event) => {
+    const touch = event.changedTouches[0];
+    touchStart.current = { x: touch.clientX, y: touch.clientY };
+  };
+
+  const handleTouchEnd = (event) => {
+    if (!touchStart.current) return;
+    const touch = event.changedTouches[0];
+    const deltaX = touch.clientX - touchStart.current.x;
+    const deltaY = touch.clientY - touchStart.current.y;
+    touchStart.current = null;
+    if (Math.abs(deltaX) < 48 || Math.abs(deltaX) <= Math.abs(deltaY)) return;
+    if (deltaX < 0) next();
+    else previous();
+  };
+
+  const NavigationButton = ({ direction, mobile = false }) => {
+    const isPrevious = direction === "previous";
+    const disabled = isPrevious ? page === 1 : page === deck.pages;
+    return (
+      <button
+        type="button"
+        className={mobile ? "viewer-mobile-arrow" : "viewer-side-arrow"}
+        onClick={isPrevious ? previous : next}
+        disabled={disabled}
+        aria-label={isPrevious ? "Предыдущий слайд" : "Следующий слайд"}
+      >
+        <span aria-hidden="true">{isPrevious ? "←" : "→"}</span>
+      </button>
+    );
+  };
+
   return (
-    <Modal open={!!deck} onClose={onClose} label={`Презентация ${deck.title}`}>
+    <Modal
+      open={!!deck}
+      onClose={onClose}
+      label={`Презентация ${deck.title}`}
+      className="presentation-modal"
+      initialFocusRef={closeButtonRef}
+    >
       <div className="viewer-bar">
-        <div>
+        <div className="viewer-heading">
           <strong>{deck.title}</strong>
-          <span>
-            {String(page).padStart(2, "0")} / {deck.pages}
-          </span>
+          <span aria-live="polite">{pageLabel}</span>
         </div>
-        <div>
-          <button
-            onClick={() => setPage(Math.max(1, page - 1))}
-            disabled={page === 1}
-            aria-label="Предыдущий слайд"
+        <div className="viewer-actions">
+          <a
+            className="viewer-original-link"
+            href={deck.externalUrl}
+            aria-label={`Открыть оригинал презентации «${deck.title}» на Яндекс Диске`}
+            {...ext}
           >
-            ←
-          </button>
+            Оригинал <span aria-hidden="true">↗</span>
+          </a>
           <button
-            onClick={() => setPage(Math.min(deck.pages, page + 1))}
-            disabled={page === deck.pages}
-            aria-label="Следующий слайд"
+            type="button"
+            className="viewer-close"
+            onClick={onClose}
+            aria-label="Закрыть"
+            ref={closeButtonRef}
           >
-            →
-          </button>
-          <button onClick={onClose} aria-label="Закрыть">
             ×
           </button>
         </div>
       </div>
-      <img
-        className="viewer-slide"
-        src={`/media/presentations/${deck.slug}/page-${String(page).padStart(2, "0")}.webp`}
-        alt={`${deck.title}, слайд ${page}`}
-      />
+      <div className="viewer-stage">
+        <NavigationButton direction="previous" />
+        <div
+          className="viewer-slide-frame"
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
+          <img
+            key={slideSrc}
+            className="viewer-slide"
+            src={slideSrc}
+            alt={`${deck.title}, слайд ${page} из ${deck.pages}`}
+          />
+        </div>
+        <NavigationButton direction="next" />
+      </div>
+      <div className="viewer-mobile-nav" aria-label="Навигация по слайдам">
+        <NavigationButton direction="previous" mobile />
+        <span aria-live="polite">{pageLabel}</span>
+        <NavigationButton direction="next" mobile />
+      </div>
     </Modal>
   );
 }
 function Presentations() {
   const [deck, setDeck] = useState(null);
+  const lastOpenerRef = useRef(null);
+
+  const openDeck = (selectedDeck, opener) => {
+    lastOpenerRef.current = opener;
+    setDeck(selectedDeck);
+  };
+
+  const closeDeck = () => {
+    setDeck(null);
+    window.requestAnimationFrame(() => lastOpenerRef.current?.focus());
+  };
+
   return (
     <Layout className="gallery-page">
       <RevealObserver />
@@ -1061,36 +1161,58 @@ function Presentations() {
         </p>
       </section>
       <section className="deck-grid">
-        {presentationDecks.map((d, index) => (
-          <button
-            className="deck-card reveal"
-            key={d.title}
-            onClick={() => setDeck(d)}
-          >
-            <img
-              src={`/media/presentations/${d.slug}/page-01.webp`}
-              alt=""
-              loading={index < 2 ? "eager" : "lazy"}
-              fetchPriority={index === 0 ? "high" : undefined}
-            />
-            <span>{d.type}</span>
-            <h2>{d.title}</h2>
-            <p>
-              {d.pages} страниц <i>Открыть ↗</i>
-            </p>
-          </button>
-        ))}
-        <article className="pptx-card reveal">
-          <span>Интерактивный PowerPoint</span>
-          <div className="ppt-icon">P</div>
-          <h2>Michelangelo («March6»)</h2>
-          <p>Интерактивная презентация PowerPoint</p>
-          <ArrowLink href="/docs/michelangelo-march6.pptx" download>
-            Скачать PPTX
-          </ArrowLink>
-        </article>
+        {presentationDecks.map((d, index) =>
+          d.slug ? (
+            <article className="deck-card reveal" key={d.title}>
+              <button
+                type="button"
+                className="deck-card__open"
+                onClick={(event) => openDeck(d, event.currentTarget)}
+                aria-label={`Открыть презентацию «${d.title}»`}
+              >
+                <img
+                  src={`/media/presentations/${d.slug}/page-01.webp`}
+                  alt=""
+                  loading={index < 2 ? "eager" : "lazy"}
+                  fetchPriority={index === 0 ? "high" : undefined}
+                />
+                <span>{d.type}</span>
+                <h2>{d.title}</h2>
+                <p>
+                  {d.pages} страниц <i>Открыть ↗</i>
+                </p>
+              </button>
+              <a
+                className="deck-original-link"
+                href={d.externalUrl}
+                aria-label={`Открыть оригинал презентации «${d.title}» на Яндекс Диске`}
+                {...ext}
+              >
+                Оригинал на Яндекс Диске <span aria-hidden="true">↗</span>
+              </a>
+            </article>
+          ) : (
+            <article className="pptx-card reveal" key={d.title}>
+              <span>{d.type}</span>
+              <div className="ppt-icon">P</div>
+              <h2>{d.title}</h2>
+              <p>Интерактивная презентация PowerPoint</p>
+              <ArrowLink href={d.file} download>
+                Скачать PPTX
+              </ArrowLink>
+              <a
+                className="pptx-original-link"
+                href={d.externalUrl}
+                aria-label={`Открыть оригинал презентации «${d.title}» на Яндекс Диске`}
+                {...ext}
+              >
+                Оригинал на Яндекс Диске <span aria-hidden="true">↗</span>
+              </a>
+            </article>
+          ),
+        )}
       </section>
-      <PresentationViewer deck={deck} onClose={() => setDeck(null)} />
+      <PresentationViewer deck={deck} onClose={closeDeck} />
       <NextProject
         href="/work/graphic-design"
         no="04"

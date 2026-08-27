@@ -75,28 +75,34 @@ export const presentationDecks = [
     type: "PDF · Презентация платформы",
     pages: 15,
     slug: "aistickers",
-    file: "/docs/ai-stickers.pdf",
+    externalUrl: "https://disk.yandex.ru/i/zlNKx3s8cM9ocg",
   },
   {
     title: "Типы данных, строки и операторы",
     type: "PDF · Учебная презентация",
     pages: 36,
     slug: "python",
-    file: "/docs/python.pdf",
+    externalUrl: "https://disk.yandex.ru/i/QA596t-AUFO_bQ",
   },
   {
     title: "Диаграмма Карно",
     type: "PDF · Учебная презентация",
     pages: 21,
     slug: "diagramma-karno",
-    file: "/docs/karnaugh-map.pdf",
+    externalUrl: "https://disk.yandex.ru/i/a2SwxQNsYLKNsw",
   },
   {
     title: "Chubby Hippo",
     type: "PDF · Презентация сайта",
     pages: 13,
     slug: "prezentaciya-sajta",
-    file: "/docs/chubby-hippo.pdf",
+    externalUrl: "https://disk.yandex.ru/i/bU1tJ4upRD93kw",
+  },
+  {
+    title: "Michelangelo («March6»)",
+    type: "Интерактивный PowerPoint",
+    file: "/docs/michelangelo-march6.pptx",
+    externalUrl: "https://disk.yandex.ru/i/2Wgscop-RsdjiA",
   },
 ];
 
