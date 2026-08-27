@@ -9,6 +9,20 @@ ASSETS = ROOT / "assets"
 OUT = ROOT / "public" / "media"
 PDF_OUT = OUT / "presentations"
 
+OUTPUT_NAME_OVERRIDES = {
+    "ai-stickers/20260318_1247_Сидящий_бегемотик_повар_simple_compose_01km05e65c.png": "ai-stickers/hippo-chef.webp",
+    "ai-stickers/20260319_2201_Милый_бегемотик_с_блинчиком_simple_compose_01km3q.png": "ai-stickers/hippo-pancakes.webp",
+    "illustrator/ПлакатыВалорант/айсо.png": "illustrator/ПлакатыВалорант/valorant-iso.webp",
+    "logo/ЛогоИконкаВекторБелый.svg": "logo/logo-icon-white.svg",
+    "logo/ЛогоИконкаВекторЖелтый.svg": "logo/logo-icon-yellow.svg",
+}
+
+def output_path(rel: Path, convert_to_webp: bool = False) -> Path:
+    override = OUTPUT_NAME_OVERRIDES.get(rel.as_posix())
+    if override:
+        return Path(override)
+    return rel.with_suffix(".webp") if convert_to_webp else rel
+
 def slug(text: str) -> str:
     pairs = {"а":"a","б":"b","в":"v","г":"g","д":"d","е":"e","ё":"e","ж":"zh","з":"z","и":"i","й":"j","к":"k","л":"l","м":"m","н":"n","о":"o","п":"p","р":"r","с":"s","т":"t","у":"u","ф":"f","х":"h","ц":"c","ч":"ch","ш":"sh","щ":"shch","ъ":"","ы":"y","ь":"","э":"e","ю":"yu","я":"ya"}
     text = "".join(pairs.get(ch, ch) for ch in text.lower())
@@ -25,7 +39,7 @@ def max_width_for(path: Path) -> int:
 
 def convert_image(src: Path):
     rel = src.relative_to(ASSETS)
-    dest = OUT / rel.with_suffix(".webp")
+    dest = OUT / output_path(rel, convert_to_webp=True)
     dest.parent.mkdir(parents=True, exist_ok=True)
     trim_transparency = rel.as_posix() in {
         "chubby-hippo/website/apple-responsive-devices-mockup (1).png",
@@ -67,7 +81,7 @@ for src in ASSETS.rglob("*"):
     if src.suffix.lower() in {".png", ".jpg", ".jpeg"}:
         convert_image(src)
     elif src.suffix.lower() in {".webp", ".svg"}:
-        dest = OUT / src.relative_to(ASSETS)
+        dest = OUT / output_path(src.relative_to(ASSETS))
         dest.parent.mkdir(parents=True, exist_ok=True)
         if not dest.exists():
             shutil.copy2(src, dest)

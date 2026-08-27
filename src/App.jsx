@@ -8,7 +8,7 @@ import {
 } from "./content.js";
 
 const ext = { target: "_blank", rel: "noopener noreferrer" };
-const logoIcon = "/media/logo/ЛогоИконкаВекторЖелтый.svg";
+const logoIcon = "/media/logo/logo-icon-yellow.svg";
 const logoOutline = "/media/logo/ЛогоВектор.svg";
 
 function Header() {
@@ -1107,7 +1107,11 @@ const graphicItems = [
   ["illustrator/Лефлет/Лефлет2.webp", "Лефлет · сторона 2", "Печатный дизайн"],
   ["illustrator/ПлакатыВалорант/сага.webp", "Sage", "Серия постеров Valorant"],
   ["illustrator/ПлакатыВалорант/клов.webp", "Clove", "Серия постеров Valorant"],
-  ["illustrator/ПлакатыВалорант/айсо.webp", "Iso", "Серия постеров Valorant"],
+  [
+    "illustrator/ПлакатыВалорант/valorant-iso.webp",
+    "Iso",
+    "Серия постеров Valorant",
+  ],
 ];
 function Lightbox({ index, setIndex }) {
   const item = index !== null ? graphicItems[index] : null;

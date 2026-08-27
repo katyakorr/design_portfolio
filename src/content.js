@@ -62,7 +62,7 @@ export const projects = [
     type: "Генеративный ИИ · Система персонажа",
     href: "/work/ai-stickers",
     image: media(
-      "ai-stickers/20260319_2201_Милый_бегемотик_с_блинчиком_simple_compose_01km3q.webp",
+      "ai-stickers/hippo-pancakes.webp",
     ),
     className: "small-card stickers",
     tags: ["100+ стикеров", "Telegram"],
@@ -107,10 +107,10 @@ export const stickerFiles = [
   "20260420_2311_Image Generation_simple_compose_01kpp89dtde9dt2qcywtesd0jd.webp",
   "20260313_2020_Image Generation_simple_compose_01kkm3arc6e6srsvfhd7s6bsjj.webp",
   "20260313_2034_Милого розового бегемотика_simple_compose_01kkm45s9pejfsxzy2tn4n2bw8.webp",
-  "20260319_2201_Милый_бегемотик_с_блинчиком_simple_compose_01km3q.webp",
+  "hippo-pancakes.webp",
   "20260322_1523_Image_Generation_simple_compose_01kmaqz8nyesjbg59512tm6g9n.webp",
   "20260322_1223_Image_Generation_simple_compose_01kmadmpxgfp3v98n6cab5gazd.webp",
-  "20260318_1247_Сидящий_бегемотик_повар_simple_compose_01km05e65c.webp",
+  "hippo-chef.webp",
   "20260314_2304_Image_Generation_simple_compose_01kkpz611wfbp8j89m4b7zbf2e.webp",
   "20260317_2255_Image_Generation_simple_compose_01kkynsx7gfzxak7sb5pr27bm0.webp",
 ];
