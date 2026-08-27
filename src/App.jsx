@@ -129,6 +129,7 @@ function Figure({ src, alt, className = "", eager = false }) {
         src={src}
         alt={alt}
         loading={eager ? "eager" : "lazy"}
+        fetchPriority={eager ? "high" : undefined}
         decoding="async"
       />
     </figure>
@@ -196,12 +197,17 @@ function Contact() {
   );
 }
 
-function HeroWorkCard({ project, className = "" }) {
+function HeroWorkCard({ project, className = "", priority = false }) {
   const image = project.images?.[1] || project.image;
   return (
     <a className={`hero-work-card ${className}`} href={project.href}>
       <div className="hero-work-card__visual">
-        <img src={image} alt={`Превью проекта ${project.title}`} />
+        <img
+          src={image}
+          alt={`Превью проекта ${project.title}`}
+          loading="eager"
+          fetchPriority={priority ? "high" : undefined}
+        />
       </div>
       <div className="hero-work-card__meta">
         <span>{project.no}</span>
@@ -238,6 +244,7 @@ function Home() {
         <HeroWorkCard
           project={projects[0]}
           className="hero-work-card--featured"
+          priority
         />
         <HeroWorkCard project={projects[1]} className="hero-work-card--blue" />
         <HeroWorkCard project={projects[2]} className="hero-work-card--pink" />
@@ -320,6 +327,7 @@ function CaseHero({
               alt=""
               data-position={position}
               loading="eager"
+              fetchPriority={position === 0 ? "high" : undefined}
             />
           ))}
         </div>
@@ -1053,7 +1061,7 @@ function Presentations() {
         </p>
       </section>
       <section className="deck-grid">
-        {presentationDecks.map((d) => (
+        {presentationDecks.map((d, index) => (
           <button
             className="deck-card reveal"
             key={d.title}
@@ -1062,7 +1070,8 @@ function Presentations() {
             <img
               src={`/media/presentations/${d.slug}/page-01.webp`}
               alt=""
-              loading="lazy"
+              loading={index < 2 ? "eager" : "lazy"}
+              fetchPriority={index === 0 ? "high" : undefined}
             />
             <span>{d.type}</span>
             <h2>{d.title}</h2>
@@ -1182,7 +1191,12 @@ function Graphic() {
           {graphicItems.slice(0, 2).map((x, i) => (
             <button onClick={() => setIndex(i)} key={x[0]}>
               <div className="graphic-canvas">
-                <img src={media(x[0])} alt={x[1]} loading="lazy" />
+                <img
+                  src={media(x[0])}
+                  alt={x[1]}
+                  loading="eager"
+                  fetchPriority={i === 0 ? "high" : undefined}
+                />
               </div>
               <span>{x[2]}</span>
               <strong>{x[1]}</strong>
@@ -1264,6 +1278,8 @@ function Stickers() {
         <img
           src={media(`ai-stickers/${stickerFiles[6]}`)}
           alt="Розовый бегемот со стопкой блинов"
+          loading="eager"
+          fetchPriority="high"
         />
       </section>
       <section className="case-section two-col sticker-task">
@@ -1328,6 +1344,7 @@ function About() {
           <img
             src={media("profile/ProfilePhoto.webp")}
             alt="Екатерина Королёва"
+            loading="eager"
             fetchPriority="high"
           />
           <figcaption>

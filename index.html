@@ -24,6 +24,32 @@
       rel="apple-touch-icon"
       href="/media/logo/ЛогоИконкаВекторБелый.svg"
     />
+    <script>
+      (() => {
+        const path = location.pathname.replace(/\/$/, "") || "/";
+        const priorityImages = {
+          "/": "/media/chubby-hippo/website/apple-responsive-devices-mockup (1).webp",
+          "/work/chubby-hippo":
+            "/media/chubby-hippo/website/apple-responsive-devices-mockup (1).webp",
+          "/work/biometry":
+            "/media/gosuslugi/floating-iphones-14-pro-max.webp",
+          "/work/presentations":
+            "/media/presentations/aistickers/page-01.webp",
+          "/work/graphic-design": "/media/illustrator/Работа1Коты.webp",
+          "/work/ai-stickers":
+            "/media/ai-stickers/20260319_2201_Милый_бегемотик_с_блинчиком_simple_compose_01km3q.webp",
+          "/about": "/media/profile/ProfilePhoto.webp",
+        };
+        const href = priorityImages[path];
+        if (!href) return;
+        const preload = document.createElement("link");
+        preload.rel = "preload";
+        preload.as = "image";
+        preload.href = href;
+        preload.fetchPriority = "high";
+        document.head.append(preload);
+      })();
+    </script>
     <title>Екатерина Королёва — UI/UX-дизайнер</title>
   </head>
   <body>
