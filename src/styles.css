@@ -1303,62 +1303,95 @@ footer small {
   gap: 28px;
 }
 .deck-card {
+  display: flex;
+  flex-direction: column;
   min-width: 0;
 }
-.deck-card__open {
-  display: block;
+.deck-card__visual {
+  overflow: hidden;
   width: 100%;
-  border: 0;
-  padding: 0;
-  background: transparent;
-  text-align: left;
-  cursor: pointer;
-}
-.deck-card__open img {
-  width: 100%;
-  aspect-ratio: 16/9;
-  object-fit: cover;
+  aspect-ratio: 16 / 9;
   border-radius: 18px;
   box-shadow: 0 12px 30px rgba(56, 42, 44, 0.1);
-  transition: 0.3s;
 }
-.deck-card__open:hover img,
-.deck-card__open:focus-visible img {
-  transform: translateY(-5px);
-  box-shadow: 0 18px 40px rgba(56, 42, 44, 0.16);
+.deck-card__visual img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
-.deck-card__open > span,
-.pptx-card > span {
+.deck-card__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+.deck-card__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 20px;
+}
+.deck-card__type {
   display: block;
+  min-width: 0;
   text-transform: uppercase;
   font-size: 10px;
   letter-spacing: 0.12em;
   color: var(--muted);
-  margin-top: 20px;
 }
-.deck-card__open h2,
-.pptx-card h2 {
+.deck-card__count {
+  flex: none;
+  color: var(--muted);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+.deck-card h2 {
   font-family: var(--serif);
   font-weight: 400;
   font-size: 32px;
-  margin: 8px 0;
+  line-height: 1.25;
+  margin: 8px 0 18px;
 }
-.deck-card__open p,
-.pptx-card p {
-  color: var(--muted);
-  font-size: 13px;
+.deck-card__actions {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 18px;
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
 }
-.deck-card__open p i {
-  float: right;
-  font-style: normal;
-  color: var(--choc);
+.deck-card__open {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 44px;
+  border: 1px solid var(--choc);
+  padding: 10px 18px;
+  border-radius: 100px;
+  background: var(--choc);
+  color: var(--bg);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 180ms ease, border-color 180ms ease, color 180ms ease,
+    transform 180ms ease;
 }
-.deck-original-link,
-.pptx-original-link {
+.deck-card__open:hover {
+  border-color: var(--pink-strong);
+  background: var(--pink-strong);
+  color: #fff;
+  transform: translateY(-2px);
+}
+.deck-card__open span {
+  font-size: 16px;
+  line-height: 1;
+}
+.deck-original-link {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  margin-top: 13px;
   color: var(--muted);
   font-size: 11px;
   font-weight: 600;
@@ -1367,35 +1400,9 @@ footer small {
   border-bottom: 1px solid color-mix(in srgb, var(--muted) 42%, transparent);
   transition: color 180ms ease, border-color 180ms ease;
 }
-.deck-original-link:hover,
-.pptx-original-link:hover {
+.deck-original-link:hover {
   color: var(--pink-strong);
   border-color: currentColor;
-}
-.pptx-card {
-  display: flex;
-  flex-direction: column;
-  justify-content: end;
-  min-height: 440px;
-  background: #f0b9c8;
-  padding: 40px;
-  border-radius: 18px;
-}
-.pptx-card .arrow-link {
-  align-self: flex-start;
-}
-.pptx-original-link {
-  align-self: flex-start;
-}
-.ppt-icon {
-  display: grid;
-  place-items: center;
-  width: 80px;
-  height: 80px;
-  background: #d04c22;
-  color: #fff;
-  font: 48px var(--serif);
-  border-radius: 14px;
 }
 .modal-open {
   overflow: hidden;
@@ -2204,8 +2211,13 @@ footer small {
   .deck-grid {
     padding-bottom: 80px;
   }
-  .pptx-card {
-    min-height: 380px;
+  .deck-card__actions {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .deck-card__open {
+    order: -1;
+    width: 100%;
   }
   .modal-backdrop {
     padding: 10px;

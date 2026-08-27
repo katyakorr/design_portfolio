@@ -234,8 +234,8 @@ function Home() {
         <div className="portfolio-intro">
           <span className="portfolio-intro__number">01—05</span>
           <p>
-            Интерфейсы, прототипы, визуальные системы и работающая вёрстка — от
-            идеи до готового цифрового продукта.
+            Работаю с интерфейсами и визуальным дизайном, люблю пробовать разные
+            форматы и находить решение под конкретную задачу.
           </p>
           <a href="#work" className="down-link">
             Все проекты <span>↓</span>
@@ -257,7 +257,7 @@ function Home() {
         <SectionTitle
           eyebrow="Избранные работы · 2026"
           title="Избранные проекты"
-          text="От пользовательского сценария и дизайн-системы до адаптивного интерфейса и работающего кода."
+          text="Несколько работ, которые лучше всего показывают, чем я занимаюсь."
         />
         <div className="featured-grid">
           {projects.slice(0, 2).map((p) => (
@@ -1161,56 +1161,43 @@ function Presentations() {
         </p>
       </section>
       <section className="deck-grid">
-        {presentationDecks.map((d, index) =>
-          d.slug ? (
-            <article className="deck-card reveal" key={d.title}>
-              <button
-                type="button"
-                className="deck-card__open"
-                onClick={(event) => openDeck(d, event.currentTarget)}
-                aria-label={`Открыть презентацию «${d.title}»`}
-              >
-                <img
-                  src={`/media/presentations/${d.slug}/page-01.webp`}
-                  alt=""
-                  loading={index < 2 ? "eager" : "lazy"}
-                  fetchPriority={index === 0 ? "high" : undefined}
-                />
-                <span>{d.type}</span>
-                <h2>{d.title}</h2>
-                <p>
-                  {d.pages} страниц <i>Открыть ↗</i>
-                </p>
-              </button>
-              <a
-                className="deck-original-link"
-                href={d.externalUrl}
-                aria-label={`Открыть оригинал презентации «${d.title}» на Яндекс Диске`}
-                {...ext}
-              >
-                Оригинал на Яндекс Диске <span aria-hidden="true">↗</span>
-              </a>
-            </article>
-          ) : (
-            <article className="pptx-card reveal" key={d.title}>
-              <span>{d.type}</span>
-              <div className="ppt-icon">P</div>
+        {presentationDecks.map((d, index) => (
+          <article className="deck-card reveal" key={d.title}>
+            <div className="deck-card__visual">
+              <img
+                src={`/media/presentations/${d.slug}/page-01.webp`}
+                alt={`Обложка презентации «${d.title}»`}
+                loading={index < 2 ? "eager" : "lazy"}
+                fetchPriority={index === 0 ? "high" : undefined}
+              />
+            </div>
+            <div className="deck-card__body">
+              <div className="deck-card__meta">
+                <span className="deck-card__type">{d.type}</span>
+                <span className="deck-card__count">Слайдов: {d.pages}</span>
+              </div>
               <h2>{d.title}</h2>
-              <p>Интерактивная презентация PowerPoint</p>
-              <ArrowLink href={d.file} download>
-                Скачать PPTX
-              </ArrowLink>
-              <a
-                className="pptx-original-link"
-                href={d.externalUrl}
-                aria-label={`Открыть оригинал презентации «${d.title}» на Яндекс Диске`}
-                {...ext}
-              >
-                Оригинал на Яндекс Диске <span aria-hidden="true">↗</span>
-              </a>
-            </article>
-          ),
-        )}
+              <div className="deck-card__actions">
+                <a
+                  className="deck-original-link"
+                  href={d.externalUrl}
+                  aria-label={`Открыть оригинал презентации «${d.title}» на Яндекс Диске`}
+                  {...ext}
+                >
+                  Оригинал на Яндекс Диске <span aria-hidden="true">↗</span>
+                </a>
+                <button
+                  type="button"
+                  className="deck-card__open"
+                  onClick={(event) => openDeck(d, event.currentTarget)}
+                  aria-label={`Смотреть презентацию «${d.title}»`}
+                >
+                  Смотреть презентацию <span aria-hidden="true">→</span>
+                </button>
+              </div>
+            </div>
+          </article>
+        ))}
       </section>
       <PresentationViewer deck={deck} onClose={closeDeck} />
       <NextProject

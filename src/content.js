@@ -98,12 +98,6 @@ export const presentationDecks = [
     slug: "prezentaciya-sajta",
     externalUrl: "https://disk.yandex.ru/i/bU1tJ4upRD93kw",
   },
-  {
-    title: "Michelangelo («March6»)",
-    type: "Интерактивный PowerPoint",
-    file: "/docs/michelangelo-march6.pptx",
-    externalUrl: "https://disk.yandex.ru/i/2Wgscop-RsdjiA",
-  },
 ];
 
 export const stickerFiles = [
