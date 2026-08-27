@@ -5,6 +5,7 @@ export const links = {
   biometryFigma:
     "https://www.figma.com/design/HSp9oTKKQshVoxofhLqwZC/%D0%91%D0%B8%D0%BE%D0%BC%D0%B5%D1%82%D1%80%D0%B8%D1%8F?node-id=0-1",
   stickers: "https://t.me/addstickers/Hippos76",
+  chubbyPresentation: "https://disk.yandex.ru/i/bU1tJ4upRD93kw",
   email: "mailto:katya_kor@internet.ru",
   telegram: "https://t.me/katya_kor_tg",
   channel: "https://t.me/katya_kor_channel",
@@ -43,7 +44,8 @@ export const projects = [
     title: "Дизайн презентаций",
     type: "PDF · PowerPoint · Визуальная подача",
     href: "/work/presentations",
-    image: "/media/presentations/aistickers/page-01.webp",
+    heroImage: "/media/presentations/aistickers/page-01.webp",
+    image: "/media/presentations/prezentaciya-sajta/page-07.webp",
     className: "small-card presentations",
     tags: ["Презентации", "Композиция"],
   },
@@ -96,7 +98,7 @@ export const presentationDecks = [
     type: "PDF · Презентация сайта",
     pages: 13,
     slug: "prezentaciya-sajta",
-    externalUrl: "https://disk.yandex.ru/i/bU1tJ4upRD93kw",
+    externalUrl: links.chubbyPresentation,
   },
 ];
 

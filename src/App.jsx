@@ -181,7 +181,11 @@ function Contact() {
         <br />
         обсудить работу?
       </h2>
-      <ArrowLink href={links.email} className="contact-main">
+      <ArrowLink
+        href={links.telegram}
+        external
+        className="contact-main"
+      >
         Напишите мне
       </ArrowLink>
       <div className="contact-links">
@@ -198,7 +202,7 @@ function Contact() {
 }
 
 function HeroWorkCard({ project, className = "", priority = false }) {
-  const image = project.images?.[1] || project.image;
+  const image = project.heroImage || project.images?.[1] || project.image;
   return (
     <a className={`hero-work-card ${className}`} href={project.href}>
       <div className="hero-work-card__visual">
@@ -215,6 +219,93 @@ function HeroWorkCard({ project, className = "", priority = false }) {
         <i aria-hidden="true">↗</i>
       </div>
     </a>
+  );
+}
+
+function InlinePresentationViewer({ deck }) {
+  const [page, setPage] = useState(1);
+  const touchStart = useRef(null);
+
+  useEffect(() => {
+    [page - 1, page + 1]
+      .filter((nextPage) => nextPage >= 1 && nextPage <= deck.pages)
+      .forEach((nextPage) => {
+        const image = new Image();
+        image.src = `/media/presentations/${deck.slug}/page-${String(nextPage).padStart(2, "0")}.webp`;
+      });
+  }, [deck, page]);
+
+  const previous = () => setPage((current) => Math.max(1, current - 1));
+  const next = () => setPage((current) => Math.min(deck.pages, current + 1));
+  const slideSrc = `/media/presentations/${deck.slug}/page-${String(page).padStart(2, "0")}.webp`;
+  const pageLabel = `${String(page).padStart(2, "0")} / ${String(deck.pages).padStart(2, "0")}`;
+
+  const handleTouchStart = (event) => {
+    const touch = event.changedTouches[0];
+    touchStart.current = { x: touch.clientX, y: touch.clientY };
+  };
+
+  const handleTouchEnd = (event) => {
+    if (!touchStart.current) return;
+    const touch = event.changedTouches[0];
+    const deltaX = touch.clientX - touchStart.current.x;
+    const deltaY = touch.clientY - touchStart.current.y;
+    touchStart.current = null;
+    if (Math.abs(deltaX) < 48 || Math.abs(deltaX) <= Math.abs(deltaY)) return;
+    if (deltaX < 0) next();
+    else previous();
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      previous();
+    }
+    if (event.key === "ArrowRight") {
+      event.preventDefault();
+      next();
+    }
+  };
+
+  return (
+    <div className="inline-presentation" aria-label={`Презентация ${deck.title}`}>
+      <div
+        className="inline-presentation__stage"
+        tabIndex="0"
+        onKeyDown={handleKeyDown}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
+        <img
+          key={slideSrc}
+          src={slideSrc}
+          alt={`${deck.title}, слайд ${page} из ${deck.pages}`}
+          loading="lazy"
+        />
+      </div>
+      <div className="inline-presentation__controls" aria-label="Навигация по презентации">
+        <button
+          type="button"
+          onClick={previous}
+          disabled={page === 1}
+          aria-label="Предыдущий слайд"
+        >
+          ←
+        </button>
+        <span aria-live="polite">{pageLabel}</span>
+        <button
+          type="button"
+          onClick={next}
+          disabled={page === deck.pages}
+          aria-label="Следующий слайд"
+        >
+          →
+        </button>
+      </div>
+      <p className="inline-presentation__hint">
+        Перелистывайте стрелками, клавишами или свайпом
+      </p>
+    </div>
   );
 }
 
@@ -668,16 +759,9 @@ function Chubby() {
           eyebrow="11 · Презентация"
           title="История проекта в 13 слайдах"
         />
-        <div className="slide-row">
-          {[1, 2, 3].map((n) => (
-            <img
-              key={n}
-              src={`/media/presentations/prezentaciya-sajta/page-${String(n).padStart(2, "0")}.webp`}
-              alt={`Презентация Chubby Hippo, слайд ${n}`}
-              loading="lazy"
-            />
-          ))}
-        </div>
+        <InlinePresentationViewer
+          deck={presentationDecks.find((item) => item.slug === "prezentaciya-sajta")}
+        />
       </section>
       <section className="case-section result">
         <p className="eyebrow">12 · Итог</p>
@@ -1163,14 +1247,22 @@ function Presentations() {
       <section className="deck-grid">
         {presentationDecks.map((d, index) => (
           <article className="deck-card reveal" key={d.title}>
-            <div className="deck-card__visual">
+            <button
+              type="button"
+              className="deck-card__visual deck-card__preview"
+              onClick={(event) => openDeck(d, event.currentTarget)}
+              aria-label={`Смотреть презентацию «${d.title}»`}
+            >
               <img
                 src={`/media/presentations/${d.slug}/page-01.webp`}
                 alt={`Обложка презентации «${d.title}»`}
                 loading={index < 2 ? "eager" : "lazy"}
                 fetchPriority={index === 0 ? "high" : undefined}
               />
-            </div>
+              <span className="deck-card__preview-label" aria-hidden="true">
+                Смотреть презентацию →
+              </span>
+            </button>
             <div className="deck-card__body">
               <div className="deck-card__meta">
                 <span className="deck-card__type">{d.type}</span>
