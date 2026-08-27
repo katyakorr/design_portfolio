@@ -878,6 +878,77 @@ function Phone({ name, label }) {
     </figure>
   );
 }
+function BiometryPrototype() {
+  const [embedLoaded, setEmbedLoaded] = useState(false);
+  const [embedScale, setEmbedScale] = useState(1);
+  const frameRef = useRef(null);
+  const embedUrl = `https://www.figma.com/embed?embed_host=share&url=${encodeURIComponent(links.biometryFigma)}`;
+
+  useEffect(() => {
+    const frame = frameRef.current;
+    if (!frame) return undefined;
+    const updateScale = () => setEmbedScale(frame.clientWidth / 390);
+    updateScale();
+    const observer = new ResizeObserver(updateScale);
+    observer.observe(frame);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <section
+      id="bio-prototype"
+      className="case-section bio-link bio-prototype-section"
+    >
+      <div className="bio-prototype-inner">
+        <div className="bio-prototype-heading reveal">
+          <p className="eyebrow">06 · Интерактивный прототип</p>
+          <h2>Попробуйте сами ✦</h2>
+          <p>Интерактивный сценарий можно пройти прямо на странице.</p>
+          <a
+            className="bio-prototype-link"
+            href={links.biometryFigma}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Открыть интерактивный прототип Госуслуги Биометрия в Figma в новой вкладке"
+          >
+            Открыть в Figma <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+
+        <div className="bio-prototype-card reveal">
+          <div className="bio-prototype-frame" ref={frameRef}>
+            {!embedLoaded && (
+              <div className="bio-prototype-fallback">
+                <div>
+                  <h3>Интерактивный прототип</h3>
+                  <p>Откройте прототип в Figma, чтобы пройти сценарий.</p>
+                  <a
+                    href={links.biometryFigma}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Открыть интерактивный прототип Госуслуги Биометрия в Figma в новой вкладке"
+                  >
+                    Открыть в Figma <span aria-hidden="true">↗</span>
+                  </a>
+                </div>
+              </div>
+            )}
+            <iframe
+              className={embedLoaded ? "is-loaded" : ""}
+              style={{ transform: `scale(${embedScale})` }}
+              src={embedUrl}
+              title="Интерактивный прототип Госуслуги Биометрия"
+              allowFullScreen
+              loading="lazy"
+              onLoad={() => setEmbedLoaded(true)}
+              onError={() => setEmbedLoaded(false)}
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
 function Biometry() {
   return (
     <Layout className="case-page bio-page">
@@ -1025,15 +1096,7 @@ function Biometry() {
           ))}
         </div>
       </section>
-      <section id="bio-prototype" className="case-section link-panel bio-link">
-        <div>
-          <p className="eyebrow">06 · Интерактивный прототип</p>
-          <h2>Пройти сценарий целиком</h2>
-        </div>
-        <ArrowLink href={links.biometryFigma} external>
-          Попробовать прототип
-        </ArrowLink>
-      </section>
+      <BiometryPrototype />
       <section className="case-section result">
         <p className="eyebrow">07 · Итог</p>
         <h2>

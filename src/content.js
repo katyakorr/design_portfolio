@@ -3,7 +3,7 @@ export const links = {
   chubbyFigma:
     "https://www.figma.com/design/biyGM1Bhm9rDKmqRHveJcb/%D0%9B%D0%B5%D0%BD%D0%B4%D0%B8%D0%BD%D0%B3-%D0%BF%D0%B5%D0%BB%D1%8C%D0%BC%D0%B5%D0%BD%D0%BD%D0%BE%D0%B9?node-id=635-1113",
   biometryFigma:
-    "https://www.figma.com/design/HSp9oTKKQshVoxofhLqwZC/%D0%91%D0%B8%D0%BE%D0%BC%D0%B5%D1%82%D1%80%D0%B8%D1%8F?node-id=0-1",
+    "https://www.figma.com/proto/HSp9oTKKQshVoxofhLqwZC/%D0%91%D0%B8%D0%BE%D0%BC%D0%B5%D1%82%D1%80%D0%B8%D1%8F?node-id=367-14&p=f&viewport=276%2C279%2C0.06&t=MZwRgVxz4ARIqLvg-1&scaling=min-zoom&content-scaling=fixed&starting-point-node-id=382%3A606&page-id=0%3A1",
   stickers: "https://t.me/addstickers/Hippos76",
   chubbyPresentation: "https://disk.yandex.ru/i/bU1tJ4upRD93kw",
   email: "mailto:katya_kor@internet.ru",
