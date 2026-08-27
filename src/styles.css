@@ -1300,7 +1300,8 @@ footer small {
   padding: 0 var(--pad) 120px;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 28px;
+  column-gap: 28px;
+  row-gap: 72px;
 }
 .deck-card {
   display: flex;
