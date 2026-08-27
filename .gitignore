@@ -1,0 +1,79 @@
+# Dependencies and package-manager state
+node_modules/
+.pnpm-store/
+
+# Build output and tool caches
+dist/
+.vite/
+.cache/
+coverage/
+.vercel/
+
+# Local environment files
+.env
+.env.*
+!.env.example
+*.local
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS and editor files
+.DS_Store
+**/.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Machine-specific launcher with absolute local Codex runtime paths
+start-portfolio.command
+
+# Original portfolio source materials. The website deploys optimized copies
+# from public/.
+assets/
+
+# Generated public files that are not referenced by the current website.
+# They remain on disk locally and can be restored from assets/ if needed.
+public/favicon.svg
+public/docs/*.pdf
+public/media/ai-stickers/Без названия273_20260328234042.webp
+public/media/profile/*
+!public/media/profile/ProfilePhoto.webp
+
+public/media/chubby-hippo/branding/ComputerHippo.webp
+public/media/chubby-hippo/branding/CryHippoОшибка.webp
+public/media/chubby-hippo/branding/SakuraHippoАтмосфера.webp
+public/media/chubby-hippo/branding/лого.webp
+public/media/chubby-hippo/branding/логоцвет.svg
+public/media/chubby-hippo/branding/логоцвет.webp
+public/media/chubby-hippo/research/jpan.moscow_\ \(1\) —\ копия.webp
+public/media/chubby-hippo/research/manekicafe.ru_\ \(1\).webp
+public/media/chubby-hippo/website/apple-responsive-devices-mockup.webp
+public/media/chubby-hippo/website/lending/*
+!public/media/chubby-hippo/website/lending/Компьютер.webp
+public/media/chubby-hippo/website/screenshots/*
+!public/media/chubby-hippo/website/screenshots/_Users_katyakor_Documents_VSCodeProjects_Pelmeni_menu.html.webp
+
+public/media/gosuslugi/screenshots/*
+!public/media/gosuslugi/screenshots/Обучение\ 2.webp
+!public/media/gosuslugi/screenshots/Обучение\ 3.webp
+!public/media/gosuslugi/screenshots/Обучение\ 5.webp
+!public/media/gosuslugi/screenshots/Обучение\ 7.webp
+!public/media/gosuslugi/screenshots/Обучение\ 9.webp
+!public/media/gosuslugi/screenshots/Подготовка.webp
+!public/media/gosuslugi/screenshots/Запуск\ сканирования.webp
+!public/media/gosuslugi/screenshots/Процесс1.webp
+!public/media/gosuslugi/screenshots/Успех.webp
+!public/media/gosuslugi/screenshots/Ошибка.webp
+!public/media/gosuslugi/screenshots/Плохое\ интернет-соединение.webp
+!public/media/gosuslugi/screenshots/Отказ\ от\ сканирования.webp
+!public/media/gosuslugi/screenshots/Отказ\ от\ обучения.webp
+!public/media/gosuslugi/screenshots/Настройки.webp
+!public/media/gosuslugi/screenshots/Оценка\ приложения.webp
